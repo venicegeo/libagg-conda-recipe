@@ -13,6 +13,7 @@ install:
   - |
     echo "Installing Miniconda."
     bash miniconda.sh -b -p $HOME/miniconda
+    rm miniconda.sh
     source activate root
   - |
     echo "Configuring Miniconda."
