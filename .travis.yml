@@ -1,20 +1,29 @@
-language: c
-sudo: false
+language: generic
 env:
   global:
     - PATH=$HOME/miniconda/bin:$PATH
 install:
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+  - |
+    echo "Downloading Miniconda."
+    if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
       wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
     else
       wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
     fi
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda config --set anaconda_upload yes
-  - conda update -q conda
-  - conda info -a
-  - conda install conda-build anaconda-client
+  - |
+    echo "Installing Miniconda."
+    bash miniconda.sh -b -p $HOME/miniconda
+    source activate root
+  - |
+    echo "Configuring Miniconda."
+    conda config --set always_yes yes --set changeps1 no
+    conda config --set anaconda_upload yes
+    conda update -q conda
+    conda info -a
+  - |
+    echo "Installing conda-build and ananconda-client."
+    conda install conda-build anaconda-client
 script:
-  - conda build --token $CONDA_UPLOAD_TOKEN .
+  - |
+    echo "Building libagg."
+    conda build --token $CONDA_UPLOAD_TOKEN .
